@@ -1,5 +1,31 @@
 (function($) {
     $.fn.q_guide_panale_maker = function(options) {
+        var $me = $(this);
+
+        // オプション
+        var settings = $.extend({
+            'h' : 10,
+            's' : 3,
+            'v' : 4,
+            'section_setting':'設定',
+            'title_label' : 'タイトル',
+            'title': '神ってる',
+            'size_label' : 'タイトル文字サイズ',
+            'color_label' : 'タイトル文字色',
+            'bg_label' : 'タイトルの背景色',
+            'padding_label' : 'パディング',
+            'padding_help' : 'タイトルバーとタイトル文字の間のスペースです',
+            'margin_label' : 'マージン',
+            'margin_help' : 'タイトルバーの下に設ける余白です',
+            'disc_label' : '注釈',
+            'disc': '「神懸かってる」と言うところを緒方孝市監督は、いまどきの言葉を使って「神ってる」と口にした。',
+            'title_help' : '必要ない場合には空にしてください',
+            'disc_help' : '必要ない場合には空にしてください。改行も使用できます。',
+            'section_preview' : 'プレビュー',
+            'section_code' : 'コード',
+            'code_help' : '下記のコードをコピーしてご利用下さい'
+        }, options);
+
 
         /* HSVからRGBを返す */
         function HSVtoRGB(h, s, v) {
@@ -99,10 +125,10 @@
             var c = [];
 
             var maxRowLength = 0;
-            for (var v = 0; v <= 255; v += (255 / 4)) {
+            for (var v = 0; v <= 255; v += (255 / settings.v)) {
                 var row = [];
-                for (var h = 360; h >= 0; h -= (360 / 10)) {
-                    for (var s = 0; s <= 255; s += (255 / 3)) {
+                for (var h = 360; h >= 0; h -= (360 / settings.h)) {
+                    for (var s = 0; s <= 255; s += (255 / settings.s)) {
                         var rgb = HSVtoRGB(h, s, v);
                         var r16 = ("00" + (rgb.r).toString(16)).slice(-2);
                         var g16 = ("00" + (rgb.g).toString(16)).slice(-2);
@@ -141,63 +167,59 @@
         }
 
         // -------------------------------------------------------------------------------
-        var $me = $(this);
-        var settings = $.extend({
-            'title': '神ってる',
-            'disc': '「神懸かってる」と言うところを緒方孝市監督は、いまどきの言葉を使って「神ってる」と口にした。'
-        }, options);
+
 
         $me.addClass('qgpm');
 
         // DOM生成
         var $inputTitle = $('<div class="qgpm-input-group" />');
-        $inputTitle.append('<label class="qgpm-label" for="qgpm-input-title">タイトル</label>');
+        $inputTitle.append('<label class="qgpm-label" for="qgpm-input-title">' + settings.title_label + '</label>');
         var $input = $('<div class="qgpm-inputs"/>');
         $input.append('<input type="text" id="qgpm-input-title" class="qgpm-input" value="' + settings.title + '"/>');
-        $input.append('<div class="qgpm-input-help">必用ない場合には空にしてください</div>');
+        $input.append('<div class="qgpm-input-help">' + settings.title_help + '</div>');
         $inputTitle.append($input);
 
         var $inputSize = $('<div class="qgpm-input-group" />');
-        $inputSize.append('<label class="qgpm-label" for="qgpm-input-size">タイトル文字サイズ</label>');
+        $inputSize.append('<label class="qgpm-label" for="qgpm-input-size">' + settings.size_label + '</label>');
         var $input = $('<div class="qgpm-inputs"/>');
         $input.append('<input type="number" id="qgpm-input-size" class="qgpm-input" value="13"/>');
         $inputSize.append($input);
 
         var $inputTitleColor = $('<div class="qgpm-input-group" />');
-        $inputTitleColor.append('<label class="qgpm-label">タイトル文字色</label>');
+        $inputTitleColor.append('<label class="qgpm-label">' + settings.color_label + '</label>');
         var $input = $('<div class="qgpm-inputs"/>');
         $input.append(buildColorPicker("title-color-picker"));
         $inputTitleColor.append($input);
 
         var $inputBGColor = $('<div class="qgpm-input-group" />');
-        $inputBGColor.append('<label class="qgpm-label">タイトルの背景色</label>');
+        $inputBGColor.append('<label class="qgpm-label">' + settings.bg_label + '</label>');
         var $input = $('<div class="qgpm-inputs"/>');
         $input.append(buildColorPicker("title-bg-color-picker"));
         $inputBGColor.append($input);
 
         var $inputPadding = $('<div class="qgpm-input-group" />');
-        $inputPadding.append('<label class="qgpm-label" for="qgpm-input-padding">パディング</label>');
+        $inputPadding.append('<label class="qgpm-label" for="qgpm-input-padding">' + settings.padding_label + '</label>');
         var $input = $('<div class="qgpm-inputs"/>');
         $input.append('<input type="number" id="qgpm-input-padding" class="qgpm-input" value="3"/>');
-        $input.append('<div class="qgpm-input-help">タイトルバーとタイトル文字の間のスペースです</div>');
+        $input.append('<div class="qgpm-input-help">' + settings.padding_help + '</div>');
         $inputPadding.append($input);
 
         var $inputMargin = $('<div class="qgpm-input-group" />');
-        $inputMargin.append('<label class="qgpm-label" for="qgpm-input-margin">マージン</label>');
+        $inputMargin.append('<label class="qgpm-label" for="qgpm-input-margin">' + settings.margin_label + '</label>');
         var $input = $('<div class="qgpm-inputs"/>');
         $input.append('<input type="number" id="qgpm-input-margin" class="qgpm-input" value="3"/>');
-        $input.append('<div class="qgpm-input-help">タイトルバーの下に設ける余白です</div>');
+        $input.append('<div class="qgpm-input-help">' + settings.margin_help + '</div>');
         $inputMargin.append($input);
 
         var $inputDisc = $('<div class="qgpm-input-group" />');
-        $inputDisc.append('<label class="qgpm-label" for="qgpm-input-title">注釈</label>');
+        $inputDisc.append('<label class="qgpm-label" for="qgpm-input-title">' + settings.disc_label + '</label>');
         var $input = $('<div class="qgpm-inputs"/>')
         $input.append('<textarea id="qgpm-input-disc" class="qgpm-input">' + settings.disc + '</textarea>');
-        $input.append('<div class="qgpm-input-help">必用ない場合には空にしてください。改行も使用できます。</div>');
+        $input.append('<div class="qgpm-input-help">' + settings.disc_help + '</div>');
         $inputDisc.append($input);
 
         var $settingArea = $('<div class="qgpm-section qgpm-setting-form"/>');
-        $settingArea.append('<h3 class="qgpm-section-title">設定</h3>');
+        $settingArea.append('<h3 class="qgpm-section-title">' + settings.section_setting + '</h3>');
         $settingArea.append($inputTitle);
         $settingArea.append($inputSize);
         $settingArea.append($inputTitleColor);
@@ -206,12 +228,12 @@
         $settingArea.append($inputMargin);
 
         var $previewArea = $('<div class="qgpm-section qgpm-preview-wrapper"/>');
-        $previewArea.append('<h3 class="qgpm-section-title">プレビュー</h3>');
+        $previewArea.append('<h3 class="qgpm-section-title">' + settings.section_preview + '</h3>');
         $previewArea.append('<div id="qgpm-prebiew" />');
 
         var $codeArea = $('<div class="qgpm-section qgpm-code-wrapper"/>');
-        $codeArea.append('<h3 class="qgpm-section-title">コード</h3>');
-        $codeArea.append('<div class="qgpm-input-help">下記のコードをコピーしてご利用下さい。</div>');
+        $codeArea.append('<h3 class="qgpm-section-title">' + settings.section_code + '</h3>');
+        $codeArea.append('<div class="qgpm-input-help">' + settings.code_help + '</div>');
         $codeArea.append('<code id="qgpm-code" />');
 
         $me.append($settingArea);
